@@ -1,13 +1,10 @@
 """应用配置，从环境变量 / .env 读取。
 
-路径策略（兼顾源码运行与 PyInstaller 打包）：
-  - 源码运行：APP_DIR = 项目根（backend 的上级）。
-  - 打包(frozen)：APP_DIR = exe 所在目录（不能用 __file__，它指向临时解压目录）。
+路径策略：APP_DIR = 项目根（backend 的上级）。
 运行数据（data.db / 115_cookie.txt / app.log）统一放 APP_DIR/data，
 主下载目录默认放 APP_DIR/downloads，备用目录可在 .env 配置；.env 从 APP_DIR
 读取。这样换台机器/改目录名都不会崩。
 """
-import sys
 from pathlib import Path
 
 from pydantic import Field, model_validator
@@ -15,9 +12,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 def _app_dir() -> Path:
-    if getattr(sys, "frozen", False):
-        return Path(sys.executable).resolve().parent      # 打包：exe 所在目录
-    return Path(__file__).resolve().parent.parent          # 源码：项目根
+    return Path(__file__).resolve().parent.parent          # 项目根
 
 
 APP_DIR = _app_dir()
@@ -27,10 +22,6 @@ _ENV_FILE = APP_DIR / ".env"
 
 
 def _visual_model_dir() -> Path:
-    """源码读项目资产；冻结包读 PyInstaller 的只读资源目录。"""
-    if getattr(sys, "frozen", False):
-        bundle_root = Path(getattr(sys, "_MEIPASS", APP_DIR)).resolve()
-        return bundle_root / "models" / "visual"
     return APP_DIR / "models" / "visual"
 
 
@@ -42,7 +33,7 @@ class Settings(BaseSettings):
     # 本地代理（爬取PH用）
     proxy: str = "http://127.0.0.1:7890"
 
-    # 下载目录（默认 exe 同级 downloads）
+    # 下载目录（默认项目根 downloads）
     download_dir: str = str(APP_DIR / "downloads")
     # 备用下载目录，多个路径用英文分号分隔。主目录低于保留空间后，
     # 新任务会按顺序选择第一个空间充足的备用目录。
@@ -63,7 +54,7 @@ class Settings(BaseSettings):
     # 下载链路：yt-dlp 原生 HLS 是唯一网络下载引擎。
     # 下载代理与爬虫代理分离，空字符串表示下载直连，不做自动切换。
     download_proxy: str = ""
-    # ffmpeg/ffprobe 所在目录（只用于下载后的封装与校验）。留空时依次查找冻结包 bin、
+    # ffmpeg/ffprobe 所在目录（只用于下载后的封装与校验）。留空时依次查找
     # 项目 tools/ffmpeg 和 PATH。
     ffmpeg_dir: str = ""
     download_max_connections: int = Field(default=15, ge=2, le=256)

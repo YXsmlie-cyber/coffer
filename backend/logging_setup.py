@@ -1,4 +1,4 @@
-"""源码与冻结包共用轮转日志；请求关联标识不包含用户内容。"""
+"""统一轮转日志；请求关联标识不包含用户内容。"""
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path

@@ -1,7 +1,7 @@
 # Coffer 架构说明
 
 > 面向“我要改这个项目”的读者：一张总览图、一份目录说明、一张“改哪里”对照表。
-> 内部代号 PH-115；代码里的 `PH115_*` 前缀、`ph115.spec`、`data/` 布局保持原名。
+> 内部代号 PH-115；代码里的 `PH115_*` 前缀与 `data/` 布局保持原名。
 
 ## 1. 总览
 
@@ -75,21 +75,15 @@ coffer/
 ├─ README.md                  产品说明、一键部署、配置表、注意事项
 ├─ LICENSE                    MIT
 ├─ run.py                     开发入口：uvicorn 起 backend.main:app（仅 127.0.0.1）
-├─ app_main.py                发行入口：单实例锁、选端口、写 data/port.txt 与 pid.txt
-├─ build.ps1                  冻结包构建（7 步：依赖 → 前端 → PyInstaller → ffmpeg → 脱敏 .env → 验收）
-├─ ph115.spec                 PyInstaller 规格（含视觉资产与前端产物）
-├─ build-tools.json           ffmpeg/ffprobe 版本与 SHA-256 指纹
 ├─ requirements.txt           源码依赖范围
-├─ requirements-release.lock  发行/CI 的完整依赖闭包
-├─ requirements-build.lock    冻结包的完整依赖闭包
-├─ requirements-build.in      冻结包依赖的输入清单
+├─ requirements-release.lock  CI 与一键部署使用的完整依赖闭包
 ├─ .env.example               配置样板（复制为 .env）
 ├─ .gitattributes / .gitignore
 ├─ .github/workflows/ci.yml   CI：Windows + Python 3.14 + Node 24
 ├─ backend/                   后端 55 个模块 / 19,144 行（见第 3 节）
 ├─ frontend/                  前端 88 个文件（见第 4 节）
-├─ scripts/                   运维与构建脚本 10 个（见第 5 节）
-├─ tests/                     测试 60 个文件 / 479 个用例（见第 6 节）
+├─ scripts/                   安装与运维脚本 8 个（见第 5 节）
+├─ tests/                     测试 57 个文件 / 473 个用例（见第 6 节）
 ├─ models/visual/             SigLIP2 资产：清单 json（入库）+ onnx（忽略，约 101 MiB）
 ├─ design-system/             视觉规范：MASTER.md + pages/remote-login.md
 └─ deploy/remote-access/      nginx 片段（手机远程访问，可选功能）
@@ -188,8 +182,6 @@ coffer/
 | 脚本 | 用途 |
 |---|---|
 | `dev_launcher.ps1` | 开发启动器：start / stop / status / url，只回收自己记录的进程 |
-| `build_support.ps1` | 构建公共函数：`Invoke-BuildCommand` 逐条检查退出码、`Assert-BuildDirectory` 校验路径边界 |
-| `build_manifest.py` | 生成/更新发行清单（含 git 状态） |
 | `lock_dependencies.py` | 校验（或 `--write` 更新）依赖锁闭包 |
 | `rebuild_database.py` | 数据库重建与结构迁移 |
 | `benchmark_reads.py` | 只读查询基准 |
@@ -232,11 +224,12 @@ coffer/
 | 形态 | 怎么起 | 前端来源 |
 |---|---|---|
 | 开发 | `python run.py`（uvicorn，无 reload） | `npm run dev` 起 5173，把 `/api`、`/ws` 代理到 8000 |
-| 发行 | `dist/PH115/PH115.exe`（单实例、自动选端口） | 构建产物由后端进程直接托管 |
+| 单端口 | `python run.py`（事先 `npm run build`） | 后端进程直接托管 `frontend/dist` |
 
-- 构建：`build.ps1`（7 步）→ 依赖 → 前端 → PyInstaller → 复制固定版 ffmpeg/ffprobe → 生成脱敏 `.env`/`启动.bat`/使用说明 → 验收；`-VerifyPackage` 才算通过
-- CI：`windows-latest`，跑 Python 单测 479 例、两个本地 HLS 集成、前端 `npm test` + `build:check` + Playwright 契约
-- 外部前置：`ffmpeg` + `ffprobe`（查找顺序：冻结包 `bin/` → `FFMPEG_DIR` → `tools/ffmpeg` → PATH）；`models/visual/siglip2-vision-int8.onnx` 仅在用审美功能时需要
+- 不做二进制发行包：分发方式是源码 + 一键命令（见 README），省掉 PyInstaller、捆绑 ffmpeg 的体积与许可问题
+- 依赖锁定：`requirements-release.lock` 由 `scripts/lock_dependencies.py` 在 Windows / Python 3.14 上校验
+- CI：`windows-latest`，跑 Python 单测 473 例、两个本地 HLS 集成、前端 `npm test` + `build:check` + Playwright 契约
+- 外部前置：`ffmpeg` + `ffprobe`（查找顺序：`FFMPEG_DIR` → `tools/ffmpeg` → PATH）；`models/visual/siglip2-vision-int8.onnx` 仅在用审美功能时需要
 
 ## 10. 改哪里
 

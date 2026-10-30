@@ -6,7 +6,6 @@
 import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path as _Path
-import sys as _sys
 from urllib.parse import urlparse
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
@@ -230,10 +229,7 @@ def _websocket_origin_allowed(ws: WebSocket) -> bool:
 
 
 def _frontend_dir() -> _Path | None:
-    if getattr(_sys, "frozen", False):
-        cand = _Path(_sys._MEIPASS) / "frontend_dist"   # 打包：随包内置
-    else:
-        cand = _Path(__file__).resolve().parent.parent / "frontend" / "dist"
+    cand = _Path(__file__).resolve().parent.parent / "frontend" / "dist"
     return cand if cand.exists() else None
 
 

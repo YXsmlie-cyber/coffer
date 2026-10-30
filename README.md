@@ -2,7 +2,7 @@
 
 Coffer（宝匣）是一个自托管的本地媒体同步工具：从站点榜单或发现页收集视频清单 → 排除网盘里已有的上传者 → 对比目录 → 只下载缺失部分 → 二次去重 → 上传归档，并持续巡查补齐。
 
-> 内部代号 PH-115：代码里的 `PH115_*` 前缀、`ph115.spec`、`data/` 目录布局保持原名，不影响使用。
+> 内部代号 PH-115：代码里的 `PH115_*` 前缀与 `data/` 目录布局保持原名，不影响使用。
 
 ## 开发者文档
 
@@ -50,7 +50,7 @@ Coffer（宝匣）是一个自托管的本地媒体同步工具：从站点榜�
 
 审美探索还需要 `models/visual/siglip2-vision-int8.onnx`。该文件约 101 MiB，受 GitHub
 单文件限制不会进入仓库；同目录的 `siglip2-int8.json` 固定了文件名、SHA-256 和量化
-质量门槛。源码运行和打包都会使用同一份资产，哈希不一致时功能会明确失败关闭。
+质量门槛。源码运行与本地测试都会使用同一份资产，哈希不一致时功能会明确失败关闭。
 
 ## 一键部署（Windows）
 
@@ -99,11 +99,9 @@ npm run dev              # http://127.0.0.1:5173
 
 浏览器打开 `http://127.0.0.1:5173`，先点右上角「登录115」（扫码或粘贴 Cookie），再从「模特」榜单或「视频」发现页开始。
 
-右上角显示实时连接状态。断线重连或从后台返回后，当前页面会自动补读最新状态；下载字节进度不会被更旧的数据库快照覆盖。点击「诊断」可下载脱敏运行指标，包含路由/SQL 类型耗时、事件循环延迟与资源计数，不包含 Cookie、媒体记录或日志正文。源码和发行版日志均保留最多四个约 5 MiB 文件。
+右上角显示实时连接状态。断线重连或从后台返回后，当前页面会自动补读最新状态；下载字节进度不会被更旧的数据库快照覆盖。点击「诊断」可下载脱敏运行指标，包含路由/SQL 类型耗时、事件循环延迟与资源计数，不包含 Cookie、媒体记录或日志正文。日志保留最多四个约 5 MiB 文件。
 
 前端回归：`npm test`、`npx playwright install chromium`、`npm run test:browser`、`npm run build:check`。浏览器回归使用隔离数据，桌面与 390px 布局同时验收。需要用本机数据检查生产前端时，先构建，再设置 `PH115_READONLY_QA=1` 运行 `npm run test:browser -- live-readonly`；该模式拒绝写入并替换媒体图片和展示名称。
-
-发行仍使用 `build.ps1 -VerifyPackage`。构建会安装完整的 `requirements-build.lock`、检查依赖闭包和 ffmpeg/ffprobe 指纹，并生成 `build-manifest.json`。升级依赖或发行工具时，应先在独立环境完成验收，再用 `scripts/lock_dependencies.py --write` 和 `scripts/build_manifest.py --update-tools` 更新清单。`requirements.txt` 保留依赖范围，日常安装优先使用已验收的发行锁定文件。
 
 ### 手机远程访问
 
@@ -115,7 +113,7 @@ npm run dev              # http://127.0.0.1:5173
 
 模特列表默认每页加载 60 位，搜索与“榜单 / 缺失 / 进度 / 名称”排序都在服务端完成，并使用不透明游标翻页；页面 DOM 不再随全部模特数量增长。兼容调用不传 `limit` 时仍返回旧版全量结构。
 
-## 测试与打包
+## 测试
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -129,16 +127,7 @@ Pop-Location
 
 前端测试覆盖二维码请求生命周期、弹窗焦点、显式保存和按钮对比度；`build:check` 同时执行生产构建与 gzip 预算：入口 JavaScript ≤ 80 KiB、单个按需 chunk ≤ 130 KiB、全部 CSS 合计 ≤ 20 KiB。CI 还会执行已有的本地 HLS fixture 验收，不连接真实 PH/115 服务。
 
-打包命令按需要选择：
-
-```powershell
-.\build.ps1 -VerifyPackage          # 构建 dist\PH115，并在隔离副本验收冻结包
-.\build.ps1 -PublishToDesktop       # 冻结包验收通过后才发布到桌面
-```
-
-不带参数的 `build.ps1` 只生成 `dist\PH115`；已有包可单独运行 `python tests\integration_packaged_native_hls.py`。源码测试通过不能替代冻结包验收。`-PublishToDesktop` 隐含 `-VerifyPackage`，验收失败会停止桌面发布；每条构建原生命令返回非零也会立即停止，不能由后续步骤覆盖失败。前端仍在 `.frontend_build` 隔离目录构建并执行相同包体预算，不清理运行中 Vite 占用的依赖。
-
-`integration_native_hls.py --full-stall` 会按默认 3 秒/60 秒阈值执行一次完整停滞验收，耗时约 1 分钟。打包前硬检查 p115client、concurrenttools 和 yt-dlp 的固定版本组合；发行包启动时还会再次验证。冻结包还需要通过清单校验的本地视觉资产和可用的 ffmpeg/ffprobe。
+`integration_native_hls.py --full-stall` 会按默认 3 秒/60 秒阈值执行一次完整停滞验收，耗时约 1 分钟。
 
 UI 维护先读 `design-system/MASTER.md`：颜色与尺寸令牌由 `frontend/src/styles/tokens.css` 定义，`style.css` 固定顺序导入九个样式文件。弹窗焦点和 Escape 共用 `modalStack`，只处理最上层可见弹窗；按钮顺序、禁用条件、下载确认与自动上传语义保持原有业务组件的约束。
 
@@ -232,7 +221,7 @@ python -m scripts.rebuild_database --source data/data.db --output data/data.rebu
 - 存量修复后仍无头像的记录可用 `python -m backend.avatar_audit --apply-status` 审计；前端只显示“源站无头像 / 主页已失效 / 源头像失效”等事实状态，不生成或热链兜底头像。
 - 已人工确认旧账号跳转到规范主页时，使用 `python -m backend.avatar_repair --canonical-model-id <ID> --canonical-url <URL>` 修复展示名、主页和头像；历史 `ph_id` 保持不变，避免视频与任务关联断裂。
 - QR 登录和 Cookie 登录结果均设置 `no-store`；115 Cookie 只保存在服务端本机文件，不返回浏览器。
-- 源码启动器和发行版只管理自身记录且身份匹配的进程，不会按端口杀死其它程序；发行版同目录只允许一个实例。
+- 启动器只管理自身记录且身份匹配的进程，不会按端口杀死其它程序。
 
 ## 许可
 

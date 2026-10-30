@@ -15,7 +15,6 @@ scan_result*.json
 scan_pollution.log
 clean_pollution.log
 _debug/
-.package-native-hls-*/
 x_nsfw/
 *.local.psd1
 docs/新项目立项/

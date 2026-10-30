@@ -107,28 +107,13 @@ def fragment_rate_limit(fragment_workers: int) -> int:
     return max(MIN_FRAGMENT_RATE_LIMIT, int(per_task / max(1, int(fragment_workers))))
 
 
-def _bundled_bin_dir() -> str | None:
-    """打包运行时返回 exe 同级的 bin 目录。"""
-    if getattr(sys, "frozen", False):
-        directory = os.path.join(os.path.dirname(sys.executable), "bin")
-        return directory if os.path.isdir(directory) else None
-    return None
-
-
-_BIN_DIR = _bundled_bin_dir()
-if _BIN_DIR and _BIN_DIR not in os.environ.get("PATH", "").split(os.pathsep):
-    # 仅供 yt-dlp 后处理和本地校验发现 ffmpeg/ffprobe；不探测下载器 CLI。
-    os.environ["PATH"] = _BIN_DIR + os.pathsep + os.environ.get("PATH", "")
-
-
 def _media_tool_dirs() -> list[str]:
-    """ffmpeg/ffprobe 的查找顺序：冻结包 bin → FFMPEG_DIR → 项目 tools/ffmpeg。
+    """ffmpeg/ffprobe 的查找顺序：FFMPEG_DIR → 项目 tools/ffmpeg → PATH。
 
-    源码运行原先只认 PATH；本机未把 ffmpeg 加入 PATH 时，每个任务都会在
-    下载完整个视频后才因找不到 ffprobe 失败。显式目录让源码运行与冻结包
-    使用同一份固定版本工具，PATH 仍作为最后的兼容兜底。
+    本机未把 ffmpeg 加入 PATH 时，每个任务都会在下载完整个视频后才因找不到
+    ffprobe 失败；显式目录让查找发生在派发之前，PATH 仍作为兼容兜底。
     """
-    candidates = [_BIN_DIR] if _BIN_DIR else []
+    candidates: list[str] = []
     configured = str(getattr(settings, "ffmpeg_dir", "") or "").strip()
     if configured:
         candidates.append(os.path.abspath(os.path.expanduser(configured)))
@@ -2634,7 +2619,7 @@ class M3U8Downloader:
         last_byte_at = started_at
         last_progress_at: str | None = None
         samples: deque[tuple[float, int]] = deque([(started_at, resume_bytes)])
-        # spawn 返回只代表子进程已创建；冻结包仍需加载运行时。真正收到 worker 的
+        # spawn 返回只代表子进程已创建；子进程仍需加载运行时。真正收到 worker 的
         # downloading 事件前继续显示“解析中”，避免把进程冷启动误报成下载中零速。
         phase = "resolving"
         waiting_sent = False

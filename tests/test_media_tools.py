@@ -34,8 +34,7 @@ class MediaToolDiscoveryTests(unittest.TestCase):
         configured = _touch_tool(self.root / "configured", "ffprobe")
         _touch_tool(self.root / "app" / "tools" / "ffmpeg", "ffprobe")
         settings.ffmpeg_dir = str(self.root / "configured")
-        with patch.object(downloader, "_BIN_DIR", None), \
-                patch.object(downloader, "APP_DIR", self.root / "app"), \
+        with patch.object(downloader, "APP_DIR", self.root / "app"), \
                 patch.object(downloader.shutil, "which", return_value="/usr/bin/ffprobe"):
             self.assertEqual(os.path.normcase(downloader.ffprobe_path()),
                              os.path.normcase(configured))
@@ -43,8 +42,7 @@ class MediaToolDiscoveryTests(unittest.TestCase):
     def test_project_tools_dir_is_used_when_path_has_no_ffmpeg(self):
         bundled = _touch_tool(self.root / "app" / "tools" / "ffmpeg", "ffmpeg")
         settings.ffmpeg_dir = ""
-        with patch.object(downloader, "_BIN_DIR", None), \
-                patch.object(downloader, "APP_DIR", self.root / "app"), \
+        with patch.object(downloader, "APP_DIR", self.root / "app"), \
                 patch.object(downloader.shutil, "which", return_value=None):
             self.assertEqual(os.path.normcase(downloader.ffmpeg_path()),
                              os.path.normcase(bundled))
