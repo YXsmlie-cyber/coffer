@@ -1,5 +1,8 @@
 # Coffer
 
+[![CI](https://github.com/YXsmlie-cyber/coffer/actions/workflows/ci.yml/badge.svg)](https://github.com/YXsmlie-cyber/coffer/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 Coffer（宝匣）是一个自托管的本地媒体同步工具：从站点榜单或发现页收集视频清单 → 排除网盘里已有的上传者 → 对比目录 → 只下载缺失部分 → 二次去重 → 上传归档，并持续巡查补齐。
 
 > 内部代号 PH-115：代码里的 `PH115_*` 前缀与 `data/` 目录布局保持原名，不影响使用。
