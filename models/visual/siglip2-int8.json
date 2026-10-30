@@ -1,0 +1,30 @@
+{
+  "model": "google/siglip2-base-patch16-224",
+  "version": "siglip2-base-p16-224-int8-v1",
+  "revision": "main",
+  "file": "siglip2-vision-int8.onnx",
+  "sha256": "544841fed69e3913fc500d9e840752e25dbec0ae424a6d4ca7e50f945be93d79",
+  "quality_passed": true,
+  "quantization_cosine_drift": 0.0009302012622356415,
+  "quantization_threshold": 0.02,
+  "quality_sample_count": 32,
+  "image_size": 224,
+  "opset": 17,
+  "dynamic_batch": true,
+  "layout": "NCHW",
+  "mean": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "std": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "output_index": 0,
+  "quantization": "MatMulNBits weight-only INT8",
+  "quantized_ops": [
+    "MatMul"
+  ]
+}

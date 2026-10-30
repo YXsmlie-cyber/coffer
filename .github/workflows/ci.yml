@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Python 测试与前端构建
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v7
+
+      - name: 准备 Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements-release.lock
+
+      - name: 安装 Python 依赖
+        run: |
+          python -m pip install pip==26.1.2
+          if ($LASTEXITCODE -ne 0) { throw "pip 升级失败" }
+          python -m pip install --no-deps -r requirements-release.lock
+          if ($LASTEXITCODE -ne 0) { throw "Python 依赖安装失败" }
+          python -m pip check
+          if ($LASTEXITCODE -ne 0) { throw "依赖一致性检查失败" }
+          python -X utf8 scripts/lock_dependencies.py
+          if ($LASTEXITCODE -ne 0) { throw "依赖锁校验失败" }
+
+      - name: 运行 Python 测试
+        run: python -m unittest discover -s tests -v
+
+      - name: 安装本地 HLS 夹具工具
+        run: |
+          choco install ffmpeg --yes --no-progress
+          if ($LASTEXITCODE -ne 0) { throw "ffmpeg 安装失败" }
+          ffmpeg -version
+          if ($LASTEXITCODE -ne 0) { throw "ffmpeg 不可用" }
+          ffprobe -version
+          if ($LASTEXITCODE -ne 0) { throw "ffprobe 不可用" }
+
+      - name: 用本地夹具验证原生 HLS
+        run: python tests/integration_native_hls.py
+
+      - name: 验证分轨与不连续 HLS
+        run: python -X utf8 tests/integration_composite_hls.py
+
+      - name: 准备 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: 安装前端依赖
+        working-directory: frontend
+        run: npm ci
+
+      - name: 验证前端生命周期边界
+        working-directory: frontend
+        run: npm test
+
+      - name: 构建前端并检查包体预算
+        working-directory: frontend
+        run: npm run build:check
+
+      - name: 安装隔离的浏览器测试运行时
+        working-directory: frontend
+        run: npx playwright install chromium
+
+      - name: 验证浏览器重连与布局契约
+        working-directory: frontend
+        run: npm run test:browser

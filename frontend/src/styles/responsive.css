@@ -1,0 +1,101 @@
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 768px) {
+  .container { padding: 32px 18px 64px; }
+  .nav {
+    padding: 8px 14px; flex-direction: column; align-items: stretch; gap: 4px;
+  }
+  .nav-primary { width: 100%; min-width: 0; }
+  .nav-primary .brand { margin-right: auto; }
+  .nav-account {
+    width: 100%; justify-content: flex-end;
+    border-top: 1px solid var(--line); padding-top: 4px;
+  }
+  .nav a { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 11px; }
+  .btn, .btn.sm { min-height: 44px; }
+  input, select, textarea { min-height: 44px; font-size: 16px; }
+  .checkbox-hit { width: 44px; height: 44px; margin-left: -14px; }
+  .discovery-filter-panel .model-search-row {
+    grid-template-columns: minmax(0, 1fr) 150px 150px;
+  }
+  .discovery-filter-panel .search-input { grid-column: 1 / -1; }
+  .tasks-head, .task-row { grid-template-columns: 28px minmax(0, 1fr) 94px 92px; gap: 4px; padding-inline: 8px; }
+  .tasks-head > :nth-child(3), .task-row > .col-model,
+  .tasks-head > :nth-child(5), .task-row > .progress-block { display: none; }
+  .mobile-task-telemetry {
+    display: inline-flex; align-items: center; gap: 5px;
+    flex: none; max-width: 118px;
+    color: var(--muted); font-size: 12px; line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .mobile-task-telemetry::before {
+    content: ''; width: 4px; height: 4px; flex: none;
+    border-radius: 50%; background: currentColor;
+  }
+  .mobile-task-telemetry.speed { color: var(--amber); }
+  .mobile-task-telemetry.waiting { color: var(--warn); }
+  .mobile-task-telemetry.retrying { color: var(--violet); }
+  .mobile-task-telemetry.processing { color: var(--accent-2); }
+  .task-row > [role="cell"]:last-child { display: flex; justify-content: flex-end; gap: 4px; }
+  .task-row .btn.sm { flex: 0 0 44px; min-width: 44px; min-height: 44px; padding: 5px 0; font-size: 12px; }
+  .task-row .status-pill { padding-inline: 5px; font-size: 12px; gap: 4px; }
+  .vlm-filters button, .tabs button { min-height: 44px; }
+  .vlm-row { min-height: 44px; }
+  .source-link { min-height: 44px; }
+  .discovery-card .actions .btn { min-height: 44px; }
+}
+
+@media (max-width: 560px) {
+  .remote-auth-shell { padding: 20px 16px; align-items: center; }
+  .remote-auth-card { padding: 26px 22px; border-radius: var(--radius-lg); }
+  .remote-auth-lock { margin-bottom: 20px; }
+  .remote-auth-intro { margin-bottom: 24px; }
+  .remote-auth-form { gap: 16px; }
+  .remote-auth-help { margin-top: 18px; }
+  .container { padding: 24px 12px 56px; }
+  .page-title { margin-bottom: 24px; }
+  .page-title h2 { font-size: 26px; }
+  .toolbar { gap: 8px; margin-bottom: 20px; }
+  .toolbar > input:not([type="number"]), .toolbar > select, .search-input {
+    width: 100% !important; min-width: 0 !important; flex: 1 0 100%;
+  }
+  .ranking-toolbar > .ranking-url { flex: 0 0 100%; }
+  .model-search-panel { padding: 12px; margin-bottom: 20px; }
+  .model-search-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .model-search-row .search-input, .model-search-row .model-search-sort {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .model-search-row .btn { width: 100%; }
+  .discovery-filter-panel .model-search-row { grid-template-columns: 1fr 1fr; }
+  .discovery-type-filter { width: 100%; }
+  .model-search-meta { flex-direction: column; gap: 3px; }
+  .model-search-meta span:last-child { align-self: flex-start; }
+  .patrol-bar > .spacer { display: none; }
+  .patrol-bar .hint { flex-basis: 100%; }
+  .modal-mask { align-items: flex-end; padding-top: 12px; }
+  .modal {
+    width: 100%; max-width: 100%; max-height: calc(100dvh - 12px);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 22px 18px; overflow-y: auto;
+  }
+  .modal.modal-wide { width: 100%; max-height: calc(100dvh - 12px); }
+  .modal h3 { margin-bottom: 16px; }
+  .vlm-head, .vlm-row {
+    grid-template-columns: 32px minmax(0, 1fr) 54px 62px;
+    gap: 6px; padding-left: 8px; padding-right: 8px;
+  }
+  .vlm-footer { position: sticky; bottom: 0; background: var(--surface); padding-top: 10px; }
+  .discovery-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+
+@media (max-height: 650px) and (orientation: landscape) {
+  .remote-auth-shell { align-items: start; overflow-y: auto; padding-block: 18px; }
+  .remote-auth-lock { display: none; }
+  .remote-auth-brand { margin-bottom: 10px; }
+  .remote-auth-card { padding-block: 24px; }
+  .remote-auth-intro { margin-bottom: 18px; }
+}

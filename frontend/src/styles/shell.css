@@ -1,0 +1,179 @@
+/* ============================================================
+   外网应用内登录
+   ============================================================ */
+.remote-auth-shell {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 32px 20px;
+  background:
+    radial-gradient(700px 420px at 8% 12%, var(--accent-soft), transparent 68%),
+    radial-gradient(620px 420px at 92% 88%, var(--amber-soft), transparent 68%),
+    var(--bg);
+}
+.remote-auth-glow {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  filter: blur(1px); opacity: .8;
+}
+.remote-auth-glow.one {
+  width: 280px; height: 280px; left: -160px; top: 12%;
+  border: 1px solid var(--accent-line);
+  box-shadow: 0 0 100px var(--accent-soft) inset;
+}
+.remote-auth-glow.two {
+  width: 360px; height: 360px; right: -220px; bottom: 4%;
+  border: 1px solid var(--amber-line);
+}
+.remote-auth-wrap { position: relative; z-index: 1; width: min(100%, 440px); }
+.remote-auth-brand {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px; padding: 0 4px;
+}
+.remote-auth-brand > span {
+  font-size: 16px; font-weight: 750; letter-spacing: -.01em;
+  background: linear-gradient(120deg, var(--accent-2), var(--amber-2));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.remote-auth-brand small {
+  display: inline-flex; align-items: center; gap: 7px;
+  color: var(--muted); font-size: 12px; font-weight: 500;
+}
+.remote-auth-brand small i {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--ok);
+  box-shadow: 0 0 0 3px var(--ok-soft);
+}
+.remote-auth-card {
+  width: min(100%, 440px);
+  padding: 34px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-3);
+}
+.remote-auth-lock {
+  width: 52px; height: 52px; display: grid; place-items: center;
+  margin-bottom: 24px; color: var(--accent-2);
+  border-radius: 15px; border: 1px solid var(--accent-line);
+  background: var(--accent-soft);
+}
+.remote-auth-kicker {
+  margin-bottom: 6px; color: var(--accent-2);
+  font-size: 12px; font-weight: 650; letter-spacing: .08em;
+}
+.remote-auth-card h1 {
+  margin: 0 0 8px; color: var(--text);
+  font-size: clamp(28px, 7vw, 34px); line-height: 1.18;
+  letter-spacing: -.035em;
+}
+.remote-auth-intro { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+.remote-auth-form { display: grid; gap: 18px; }
+.auth-field { display: grid; gap: 8px; }
+.auth-field label { color: var(--text-2); font-size: 13px; font-weight: 600; }
+.auth-field input {
+  width: 100%; height: 50px; padding: 0 14px;
+  background: var(--input-bg); border-color: var(--line-3);
+  font-size: 16px;
+}
+.auth-field input:hover:not(:disabled) { border-color: var(--muted-2); }
+.auth-field input[aria-invalid="true"]:not(:focus) { border-color: var(--err); }
+.auth-password-wrap { position: relative; }
+.auth-password-wrap input { padding-right: 56px; }
+.auth-password-toggle {
+  position: absolute; right: 3px; top: 3px;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  color: var(--muted); background: transparent; border: 0;
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.auth-password-toggle:hover { color: var(--text); background: var(--surface-3); }
+.remote-auth-remember {
+  min-height: 44px; display: flex; align-items: center; gap: 10px;
+  width: fit-content; max-width: 100%; color: var(--text-2);
+  font-size: 13px; cursor: pointer;
+}
+.remote-auth-remember input {
+  width: 18px; height: 18px; padding: 0; flex: none;
+  accent-color: var(--accent); cursor: pointer;
+}
+.remote-auth-error {
+  min-height: 21px; margin: -6px 0 0;
+  color: var(--err); font-size: 13px; line-height: 1.55;
+}
+.btn.remote-auth-submit { width: 100%; min-height: 50px; font-size: 15px; }
+.auth-spinner {
+  width: 17px; height: 17px; display: inline-block; flex: none;
+  border: 2px solid color-mix(in srgb, currentColor 28%, transparent); border-top-color: currentColor;
+  border-radius: 50%; animation: authSpin .7s linear infinite;
+}
+@keyframes authSpin { to { transform: rotate(360deg); } }
+.remote-auth-help {
+  margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line);
+  color: var(--muted-2); font-size: 12px; line-height: 1.6;
+}
+.remote-auth-loading { align-content: center; gap: 12px; color: var(--muted); }
+.remote-auth-loading .auth-spinner { width: 24px; height: 24px; color: var(--accent-2); }
+.remote-auth-connect-error { text-align: center; }
+.remote-auth-connect-error h1 { font-size: 26px; }
+.remote-auth-connect-error p { margin: 10px 0 24px; color: var(--muted); }
+.remote-logout { color: var(--muted-2) !important; }
+.remote-logout:hover:not(:disabled) { color: var(--err) !important; background: var(--err-soft) !important; }
+
+/* ============================================================
+   导航
+   ============================================================ */
+.nav {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 16px;
+  padding: 10px 32px;
+  border-bottom: 1px solid var(--line);
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  position: sticky; top: 0; z-index: 50;
+}
+.nav-primary, .nav-account { display: flex; align-items: center; gap: 4px; }
+.nav-account { flex: none; flex-wrap: wrap; gap: 10px; }
+.connection-status { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.connection-status.reconnecting, .connection-status.offline { color: var(--amber-2); }
+.nav .brand {
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 17px;
+  margin-right: 24px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.nav a {
+  position: relative;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  color: var(--text-2);
+  font-size: 14px; font-weight: 400;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.nav a:hover { color: var(--text); }
+.nav a.active { color: var(--text); font-weight: 600; background: var(--fill-1); }
+.nav .cloud-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted);
+}
+.nav .cloud-status::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--muted-2);
+  transition: background var(--t), box-shadow var(--t);
+}
+.nav .cloud-status.on::before {
+  background: var(--ok);
+  box-shadow: 0 0 0 3px var(--ok-soft);
+}
+
+/* 路由切换时把焦点交给主内容区供读屏使用；区域本身不画焦点框。 */
+#main-content:focus { outline: none; }
+.container {
+  padding: var(--space-8) 36px 72px;
+  max-width: 1180px;
+  margin: 0 auto;
+}

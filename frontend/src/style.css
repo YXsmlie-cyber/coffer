@@ -1,0 +1,11 @@
+/* 显式保持原级联顺序：基础 → 组件 → 响应式 → 工作区 → 媒体库。 */
+@import "./styles/tokens.css";
+@import "./styles/shell.css";
+@import "./styles/controls.css";
+@import "./styles/media.css";
+@import "./styles/tasks-dialogs.css";
+@import "./styles/responsive.css";
+@import "./styles/library.css";
+@import "./styles/taste.css";
+@import "./styles/liked-models.css";
+@import "./styles/media-library.css";

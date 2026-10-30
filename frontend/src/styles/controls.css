@@ -1,0 +1,166 @@
+/* ============================================================
+   按钮
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-weight: 500; font-size: 14px;
+  letter-spacing: -0.01em;
+  position: relative; overflow: hidden;
+  transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast) var(--ease);
+  white-space: nowrap;
+  min-height: 40px;
+}
+.btn:hover:not(:disabled) { background: var(--button-hover); }
+.btn:active:not(:disabled) { transform: scale(.98); }
+
+.btn.secondary {
+  background: var(--fill-1);
+  color: var(--text);
+}
+.btn.secondary:hover:not(:disabled) { background: var(--fill-2); }
+.btn.ghost {
+  background: transparent;
+  color: var(--muted);
+  padding: 7px 12px;
+  box-shadow: none;
+}
+.btn.ghost:hover:not(:disabled) { color: var(--text); background: var(--fill-1); box-shadow: none; }
+.btn.danger { background: transparent; color: var(--err); box-shadow: none; }
+.btn.danger:hover:not(:disabled) { color: var(--err); background: var(--err-soft); box-shadow: none; }
+.btn.amber { background: var(--amber-fill); color: var(--on-amber); }
+.btn.amber:hover:not(:disabled) { filter: brightness(.94); }
+.btn.icon { padding: 8px; min-width: 40px; }
+.btn.sm { padding: 6px 12px; font-size: 13px; min-height: 36px; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ============================================================
+   输入
+   ============================================================ */
+input, select, textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--line-3);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 14px; font-family: inherit;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--input-bg);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+input::placeholder, textarea::placeholder { color: var(--muted-2); }
+select { cursor: pointer; }
+
+/* ============================================================
+   页头
+   ============================================================ */
+.page-title { margin-bottom: var(--space-6); }
+.page-title h2 {
+  font-family: var(--font-display);
+  font-size: 34px; font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15; margin-bottom: 7px;
+  color: var(--text);
+}
+.page-title .sub { color: var(--muted); font-size: 14px; }
+
+/* —— 统计仪表盘条 —— */
+.stat-strip {
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+.stat-chip {
+  display: flex; align-items: baseline; gap: 7px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  font-size: 13px; color: var(--muted);
+  transition: border-color var(--t);
+}
+.stat-chip:hover { border-color: var(--line-2); }
+/* 统计胶囊同时是筛选按钮：选中态用浅蓝底与蓝描边，数字颜色保持原状态语义。 */
+button.stat-chip {
+  font: inherit; font-size: 13px; cursor: pointer; text-align: left;
+  min-height: 44px;
+  transition: border-color var(--t), background var(--t), color var(--t);
+}
+button.stat-chip.selected {
+  background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-2);
+}
+.toolbar .queue-search { width: 240px; max-width: 100%; }
+.stat-chip b { font-size: 19px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.stat-chip.running b { color: var(--accent-2); }
+.stat-chip.queued  b { color: var(--muted); }
+.stat-chip.completed b { color: var(--text); }
+.stat-chip.failed  b { color: var(--err); }
+.stat-chip.failed_recoverable b { color: var(--text); }
+.stat-chip.failed_manual b { color: var(--err); }
+.stat-chip.skipped b { color: var(--text); }
+
+/* ============================================================
+   工具栏
+   ============================================================ */
+.toolbar {
+  display: flex; gap: var(--space-2); margin-bottom: var(--space-6);
+  align-items: center; flex-wrap: wrap;
+}
+.toolbar .hint { color: var(--muted); font-size: 13px; }
+.toolbar .spacer { flex: 1; }
+.ranking-toolbar .ranking-url { flex: 1; min-width: 220px; }
+.search-input { min-width: 200px; }
+
+.model-search-panel {
+  margin-bottom: var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+.model-search-form { display: grid; gap: 9px; }
+.model-search-label {
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+.model-search-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto auto 140px;
+  gap: 10px;
+  align-items: center;
+}
+.model-search-row .search-input { width: 100%; min-width: 0; }
+.model-search-sort { width: 140px; }
+.model-search-meta {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  color: var(--muted-2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.model-search-meta span:last-child { flex: none; white-space: nowrap; }
+.model-search-feedback {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.model-search-feedback.success {
+  color: var(--ok);
+  background: var(--ok-soft);
+}
+.model-search-feedback.error {
+  color: var(--err);
+  background: var(--err-soft);
+}

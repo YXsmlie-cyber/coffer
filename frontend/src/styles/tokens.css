@@ -1,0 +1,210 @@
+/* ============================================================
+   PH-115 Sync — 设计系统
+   风格: 接近 Apple 官网的明亮界面 · 跟随系统浅色/深色 · 系统字体
+   本文件为颜色、间距与形状令牌的权威来源，见 design-system/MASTER.md
+   浅色值写在 :root；深色值只在下方 prefers-color-scheme: dark 中覆盖。
+   ============================================================ */
+:root {
+  color-scheme: light dark;
+
+  /* —— 表面分层：灰底页面上放白卡；填充色用于次要按钮和分段控件 —— */
+  --bg:          #f5f5f7;
+  --surface:     #ffffff;
+  --surface-2:   #f5f5f7;
+  --surface-3:   #e8e8ed;
+  --surface-4:   #d2d2d7;
+  --fill-1:      rgba(0, 0, 0, .05);
+  --fill-2:      rgba(0, 0, 0, .09);
+  --input-bg:    #ffffff;
+  --nav-bg:      rgba(250, 250, 252, .8);
+  --elevated:    rgba(255, 255, 255, .86);
+  --scrim:       rgba(0, 0, 0, .3);
+
+  /* —— 边框（发丝线） —— */
+  --line:        rgba(0, 0, 0, .07);
+  --line-2:      rgba(0, 0, 0, .1);
+  --line-3:      rgba(0, 0, 0, .18);
+
+  /* —— 文本 —— */
+  --text:        #1d1d1f;
+  --text-2:      #424245;
+  --muted:       #515154;
+  --muted-2:     #636366;
+
+  /* —— 主色: Apple 蓝 (链接/数据/进度) —— */
+  --accent:      #0071e3;
+  --accent-2:    #0066cc;
+  --accent-3:    #0058b0;
+  --accent-soft: rgba(0, 113, 227, .1);
+  --accent-glow: rgba(0, 113, 227, .18);
+  --accent-line: rgba(0, 113, 227, .3);
+  --button-bg:   #0071e3;
+  --button-hover:#0062c4;
+  --button-text: #ffffff;
+  --danger-bg:   #d70015;
+  --danger-hover:#b80012;
+
+  /* —— 语义：文字色在白卡上至少 4.5:1；-fill 是图形填充 —— */
+  --amber:       #b25000;
+  --amber-2:     #9a4500;
+  --amber-soft:  rgba(255, 149, 0, .13);
+  --amber-line:  rgba(255, 149, 0, .38);
+  --amber-fill:  #ffc21a;
+  --on-amber:    #2a1c00;
+  --ok:          #1a7f37;
+  --ok-soft:     rgba(52, 199, 89, .14);
+  --ok-line:     rgba(52, 199, 89, .4);
+  --ok-fill:     #34c759;
+  --warn:        #8f6a00;
+  --warn-soft:   rgba(255, 204, 0, .18);
+  --err:         #d70015;
+  --err-soft:    rgba(255, 59, 48, .1);
+  --err-line:    rgba(255, 59, 48, .34);
+  --violet:      #8944ab;
+  --violet-soft: rgba(175, 82, 222, .12);
+
+  /* —— 名次徽章（固定底色，配深色文字） —— */
+  --rank-gold:   #f5c451;
+  --rank-silver: #c7ced8;
+  --rank-bronze: #d08b5b;
+
+  /* —— 字体 —— */
+  --font-text:    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text",
+                  "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display",
+                  "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono:    ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+
+  /* —— 圆角 —— */
+  --radius-sm:   10px;
+  --radius:      12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-pill: 980px;
+
+  /* —— 阴影 —— */
+  --shadow-1:    0 1px 2px rgba(0,0,0,.04);
+  --shadow-2:    0 4px 20px rgba(0,0,0,.06);
+  --shadow-3:    0 20px 60px rgba(0,0,0,.14);
+  --shadow-glow: 0 0 24px var(--accent-glow);
+
+  /* —— 动效 —— */
+  --ease:        cubic-bezier(.4, 0, .2, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --t-fast:      .14s;
+  --t:           .22s;
+  --t-slow:      .36s;
+  --space-1:     4px;
+  --space-2:     8px;
+  --space-3:     12px;
+  --space-4:     16px;
+  --space-6:     24px;
+  --space-8:     32px;
+  --touch-target:44px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #000000;
+    --surface:     #1d1d1f;
+    --surface-2:   #2a2a2d;
+    --surface-3:   #3a3a3d;
+    --surface-4:   #4a4a4e;
+    --fill-1:      rgba(255, 255, 255, .08);
+    --fill-2:      rgba(255, 255, 255, .14);
+    --input-bg:    #1d1d1f;
+    --nav-bg:      rgba(22, 22, 23, .8);
+    --elevated:    rgba(44, 44, 46, .86);
+    --scrim:       rgba(0, 0, 0, .6);
+
+    --line:        rgba(255, 255, 255, .08);
+    --line-2:      rgba(255, 255, 255, .12);
+    --line-3:      rgba(255, 255, 255, .22);
+
+    --text:        #f5f5f7;
+    --text-2:      #d2d2d7;
+    --muted:       #bdbdc2;
+    --muted-2:     #a8a8ad;
+
+    --accent:      #2997ff;
+    --accent-2:    #2997ff;
+    --accent-3:    #0071e3;
+    --accent-soft: rgba(41, 151, 255, .16);
+    --accent-glow: rgba(41, 151, 255, .22);
+    --accent-line: rgba(41, 151, 255, .38);
+    --button-bg:   #0071e3;
+    --button-hover:#0062c4;
+
+    --amber:       #ffb340;
+    --amber-2:     #ffc766;
+    --amber-soft:  rgba(255, 159, 10, .16);
+    --amber-line:  rgba(255, 159, 10, .4);
+    --ok:          #4fd67a;
+    --ok-soft:     rgba(48, 209, 88, .15);
+    --ok-line:     rgba(48, 209, 88, .4);
+    --ok-fill:     #30d158;
+    --warn:        #ffd60a;
+    --warn-soft:   rgba(255, 214, 10, .14);
+    --err:         #ff6961;
+    --err-soft:    rgba(255, 69, 58, .16);
+    --err-line:    rgba(255, 69, 58, .4);
+    --violet:      #d08cff;
+    --violet-soft: rgba(191, 90, 242, .18);
+
+    --shadow-1:    0 1px 2px rgba(0,0,0,.5);
+    --shadow-2:    0 4px 20px rgba(0,0,0,.4);
+    --shadow-3:    0 20px 60px rgba(0,0,0,.6);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { min-height: 100%; background: var(--bg); }
+body {
+  min-height: 100%;
+  font-family: var(--font-text);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: -.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+#app { min-height: 100vh; min-height: 100dvh; }
+a { color: inherit; text-decoration: none; }
+img { display: block; }
+button { font-family: inherit; }
+.mono, .tabular { font-variant-numeric: tabular-nums; }
+
+/* 屏幕阅读器专用：视觉隐藏但对 AT 可见 */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; left: 12px; top: 8px; z-index: 1000;
+  transform: translateY(-160%);
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  color: var(--button-text); background: var(--button-bg);
+}
+.skip-link:focus { transform: translateY(0); }
+
+::selection { background: var(--accent-glow); color: var(--text); }
+
+/* 全局键盘焦点环：仅键盘导航(:focus-visible)时显示，不干扰鼠标点击。
+   覆盖所有交互元素，保证 Tab 导航可见焦点（WCAG 2.4.7）。 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+/* 已有自定义焦点样式的输入框沿用其环，避免双重描边 */
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; }
+/* 鼠标点击不显示焦点环（兜底，现代浏览器 :focus-visible 已处理） */
+:focus:not(:focus-visible) { outline: none; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-4); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted-2); background-clip: padding-box; }
