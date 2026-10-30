@@ -45,7 +45,7 @@ def installed_closure(roots):
 
 def lock_text(pins):
     return ("# Windows x64 / Python 3.14；由 scripts/lock_dependencies.py 从验收环境生成。\n"
-            "# 完整传递依赖均固定版本；升级需重新生成并完成回归。\n"
+            "# 完整传递依赖均固定版本；升级需重新生成并完成回归与冻结包验收。\n"
             + "".join(f"{name}=={version}\n" for name, version in pins.items()))
 
 
